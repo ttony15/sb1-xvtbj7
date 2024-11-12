@@ -1,0 +1,111 @@
+// Add these models to your existing schema.prisma file
+
+model OnboardingData {
+  id            String    @id @default(uuid())
+  userId        String    @unique
+  user          User      @relation(fields: [userId], references: [id])
+  
+  // Company Profile
+  companyProfile CompanyProfile?
+  
+  // Target Audience
+  targetAudience TargetAudience?
+  
+  // Content Preferences
+  contentPreferences ContentPreferences?
+  
+  // Brand Voice
+  brandVoice BrandVoice?
+  
+  // Marketing Goals
+  marketingGoals MarketingGoals?
+  
+  // Additional Info
+  additionalInfo AdditionalInfo?
+  
+  completed     Boolean   @default(false)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+}
+
+model CompanyProfile {
+  id            String    @id @default(uuid())
+  onboardingId  String    @unique
+  onboarding    OnboardingData @relation(fields: [onboardingId], references: [id])
+  
+  name          String
+  website       String
+  industry      String
+  size          String
+  description   String
+  competitors   String[]
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+}
+
+model TargetAudience {
+  id            String    @id @default(uuid())
+  onboardingId  String    @unique
+  onboarding    OnboardingData @relation(fields: [onboardingId], references: [id])
+  
+  demographics  Json      // Store age ranges, locations, job titles, industries
+  interests     String[]
+  challenges    String[]
+  goals         String[]
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+}
+
+model ContentPreferences {
+  id            String    @id @default(uuid())
+  onboardingId  String    @unique
+  onboarding    OnboardingData @relation(fields: [onboardingId], references: [id])
+  
+  contentTypes  String[]
+  topics        String[]
+  tone          String
+  frequency     Json      // Store posting frequency and platforms
+  hashtags      String[]
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+}
+
+model BrandVoice {
+  id            String    @id @default(uuid())
+  onboardingId  String    @unique
+  onboarding    OnboardingData @relation(fields: [onboardingId], references: [id])
+  
+  personality   Json      // Store traits and tone
+  values        String[]
+  messaging     Json      // Store key messages, unique value, tagline
+  visualStyle   Json      // Store colors and style
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+}
+
+model MarketingGoals {
+  id            String    @id @default(uuid())
+  onboardingId  String    @unique
+  onboarding    OnboardingData @relation(fields: [onboardingId], references: [id])
+  
+  objectives    Json[]    // Store type, target, timeline
+  kpis          String[]
+  budget        Json      // Store range and allocation
+  timeline      Json      // Store start date and milestones
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+}
+
+model AdditionalInfo {
+  id                String    @id @default(uuid())
+  onboardingId      String    @unique
+  onboarding        OnboardingData @relation(fields: [onboardingId], references: [id])
+  
+  marketingChallenges String
+  successMetrics    String
+  competitorStrategy String
+  pastExperience    String
+  additionalContext String?
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+}
